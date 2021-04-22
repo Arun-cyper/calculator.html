@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>java script</title>
+    <title>Calculator</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
       rel="stylesheet">
@@ -19,9 +19,15 @@
             margin-top: 10px !important;
             height: 50px;
         }
-        .head input {
+        .head .input {
             margin-top: 10px;
             width: 100% ;
+            height: 33px;
+            border-bottom: 3px solid rgb(160, 160, 160);
+            border-top: 3px solid ;
+            border-left: 3px solid grey;
+            border-right: 3px solid grey;
+            border-radius: 3px;
         }
         
         .head span {
@@ -50,7 +56,7 @@
             width: 100%;
             
         }
-        input:focus{
+        .input:focus{
             outline: none;
         }
         .btn:focus{
@@ -62,7 +68,7 @@
 <body>
 <header class="container-fluid text-center display-4 bg-info">Calculator</header>
    <div class="container-sm col-3 bg-dark calc">
-<div class="head "><input type="text" class="bg-info text-right"name="" id="box">
+<div class="head "><div  class="bg-info input text-right"name="" id="box"></div>
 <span onclick="backspace();"class="text-dark btn btn-danger material-icons-outlined">
     backspace
     </span></div>
@@ -94,7 +100,7 @@
 <div class="r1 btn-group">
     <button class="btn btn-secondary" onclick="Write('(');">(</button>
     <button class="btn btn-secondary" onclick="Write(')');">)</button>
-    <button class="btn btn-secondary" onclick="Eval();funTime=true;">Ans</button>
+    <button class="btn btn-secondary" onclick="Eval();">Ans</button>
     <button class="btn btn-secondary" onclick="Write('/');">/</button>
 </div > 
 </div>
@@ -104,53 +110,39 @@
     funTime = true;
    
     function Clear(){
-        document.getElementById("box").value="";
+        document.getElementById("box").innerHTML="";
     }
     function Eval(){
-      var a = document.getElementById("box").value ;
-      document.getElementById("box").value = eval(a);
-      setCaretPosition('box',-1 )  ;
+        funTime=true;
+        var eValue ;
+      var a = document.getElementById("box").innerHTML ;
+      try{eValue = eval(a) ;}
+      catch(err){
+          eValue = undefined ;
+         funtime = false ;
+      }
+      if (isNaN( eValue)){
+        document.getElementById("box").innerHTML = undefined ;
+         funtime = false ;
+      }
+      else{document.getElementById("box").innerHTML = eValue;
     }
+}
     function backspace(){
-        var s =document.getElementById("box").selectionStart ;
-    if(funTime){
-        if(s==0 && document.getElementById("box").value.length==0){
-        setCaretPosition('box',-1 )  ;
-        }
-        else{
-            var val =  document.getElementById("box").value;
-            var b= val.slice(0,  s).length;
-            document.getElementById("box").value= val.slice(0, s-1) +val.slice(s,);
-            
-        setCaretPosition('box', s-1)  ;
-        }
-    }
-    else{  
-        funTime=true;
-          setCaretPosition('box', -1)  ;
-        } 
-
-    }
+      let s = document.getElementById("box").innerHTML.length;
+        if(s!== 0){
+            var val =  document.getElementById("box").innerHTML;
+            document.getElementById("box").innerHTML= val.slice(0, s-1) ;
+           
+    }}
     function Write(a) {
-        var s =document.getElementById("box").selectionStart ;
-    if(funTime){
-        if(s==0 && document.getElementById("box").value.length==0){
-            document.getElementById("box").value+=a;
-            
-        setCaretPosition('box',-1 )  ;
-        }
-        else{
-            var val =  document.getElementById("box").value;
-            var b= val.slice(0,  s).length;
-            document.getElementById("box").value= val.slice(0, s)+ a +val.slice(s,);
-            
-        setCaretPosition('box', s+1)  ;
-        }
-    }
-    else{  
-        funTime=true;
-        document.getElementById("box").value = a ;   setCaretPosition('box', -1)  ;
-        }   
+        if(funTime)
+            document.getElementById("box").innerHTML+=a;
+            else{
+                document.getElementById("box").innerHTML=a;
+                funTime=true;
+            }
+       
     }
     function setCaretPosition(elemId, caretPos) {
     var elem = document.getElementById(elemId);
